@@ -1,0 +1,315 @@
+import:
+	dev.lone.itemsadder.api.ItemsAdder
+	dev.lone.itemsadder.api.CustomBlock
+	dev.lone.itemsadder.api.CustomStack
+	dev.lone.itemsadder.api.CustomMob
+	dev.lone.itemsadder.api.CustomCrop
+	org.bukkit.event.player.PlayerInteractEvent
+	org.bukkit.inventory.EquipmentSlot as EquipmentSlot
+	org.bukkit.Location
+	org.bukkit.entity.Entity
+	org.bukkit.entity.EntityType
+	org.bukkit.entity.Player
+	org.bukkit.event.player.PlayerInteractAtEntityEvent
+	org.bukkit.block.Block
+	org.bukkit.inventory.ItemStack
+
+
+#  ______                              _                 
+# |  ____|                            (_)                
+# | |__  __  ___ __  _ __ ___  ___ ___ _  ___  _ __  ___ 
+# |  __| \ \/ / '_ \| '__/ _ \/ __/ __| |/ _ \| '_ \/ __|
+# | |____ >  <| |_) | | |  __/\__ \__ \ | (_) | | | \__ \
+# |______/_/\_\ .__/|_|  \___||___/___/_|\___/|_| |_|___/
+#             | |                                        
+#             |_|                                        	
+#
+#Return the name of the custom block
+expression (ia|itemadder) [custom]block name of %$blocks%:
+	return type: text
+	get:
+		set {_block} to expr-1
+		set {_isCustomBlock} to ItemsAdder.isCustomBlock({_block})		
+		if {_isCustomBlock} is true:
+			set {_return} to ItemsAdder.getCustomBlock({_block})
+			set {_finalreturn} to {_return}.getItemMeta().getDisplayName()
+			return {_finalreturn}
+#
+#Return the name of the custom item
+expression (ia|itemadder) [custom]item name of %$items%:
+	return type: text
+	get:
+		set {_item} to expr-1
+		set {_isCustomItem} to ItemsAdder.isCustomItem({_item})		
+		if {_isCustomItem} is true:
+			set {_return} to ItemsAdder.getCustomItemName({_item})
+			return {_return}
+#
+#Return the durability of the custom item
+expression (ia|itemadder) [custom]item dura[bility] of %$items%:
+	return type: integer
+	get:
+		set {_item} to expr-1
+		set {_isCustomItem} to ItemsAdder.isCustomItem({_item})		
+		if {_isCustomItem} is true:
+			set {_return} to ItemsAdder.getCustomItemDurability({_item})
+			return {_return}			
+#
+#Return the maximum durability of the custom item
+expression (ia|itemadder) [custom]item max dura[bility] of %$items%:
+	return type: integer
+	get:
+		set {_item} to expr-1
+		set {_isCustomItem} to ItemsAdder.isCustomItem({_item})		
+		if {_isCustomItem} is true:
+			set {_return} to ItemsAdder.getCustomItemMaxDurability({_item})
+			return {_return}
+#
+#Return the name of the custom entity
+expression (ia|itemadder) [custom]entity name of %entity%:
+	return type: text
+	get:
+		set {_mob} to expr-1
+		set {_apiid} to CustomMob.byAlreadySpawned({_mob})
+		set {_name} to {_apiid}.getName()
+		return {_name}
+#
+#Return the namespace of the custom entity
+expression (ia|itemadder) [custom]entity namespace of %entity%:
+	return type: text
+	get:
+		set {_mob} to expr-1
+		set {_apiid} to CustomMob.byAlreadySpawned({_mob})
+		set {_namespace} to {_apiid}.getNamespace()
+		return {_namespace}
+#
+#Return the entity type of the custom entity
+expression (ia|itemadder) [custom]entity type of %entity%:
+	return type: text
+	get:
+		set {_mob} to expr-1
+		set {_apiid} to CustomMob.byAlreadySpawned({_mob})
+		set {_entity} to {_apiid}.getEntity()
+		return {_entity}
+#
+#Return the entity namespace ID of the custom entity
+expression (ia|itemadder) [custom]entity namespaceid of %entity%:
+	return type: text
+	get:
+		set {_mob} to expr-1
+		set {_apiid} to CustomMob.byAlreadySpawned({_mob})
+		set {_namespaceid} to {_apiid}.getNamespacedID()
+		return {_namespaceid}
+#
+#Return the permission of a custom item
+expression (ia|itemadder) [custom]item permission of %item%:
+	return type: text
+	get:
+		set {_item} to expr-1
+		set {_itemstack} to CustomStack.byItemStack({_item})	
+		set {_return} to CustomStack.getPermission({_itemstack})
+		return {_return}
+#
+#Return the age of a crop
+expression (ia|itemadder) [custom]crop age of %block%:
+	return type: number
+	get:
+		set {_block} to expr-1
+		set {_blockid} to CustomCrop.byAlreadyPlaced({_block})
+		set {_return} to {_blockid}.getAge()
+		return {_return}
+#
+#Return the max age of a crop
+expression (ia|itemadder) [custom]crop max[imum] age of %block%:
+	return type: number
+	get:
+		set {_block} to expr-1
+		set {_blockid} to CustomCrop.byAlreadyPlaced({_block})
+		set {_return} to {_blockid}.getMaxAge()
+		return {_return}
+#
+#Return the seed of a crop
+expression (ia|itemadder) [custom]crop seed of %block%:
+	return type: number
+	get:
+		set {_block} to expr-1
+		set {_blockid} to CustomCrop.byAlreadyPlaced({_block})
+		set {_return} to {_blockid}.getSeed()
+		return {_return}
+
+#   _____                _ _ _   _                 
+#  / ____|              | (_) | (_)                
+# | |     ___  _ __   __| |_| |_ _  ___  _ __  ___ 
+# | |    / _ \| '_ \ / _` | | __| |/ _ \| '_ \/ __|
+# | |___| (_) | | | | (_| | | |_| | (_) | | | \__ \
+#  \_____\___/|_| |_|\__,_|_|\__|_|\___/|_| |_|___/
+#                                                                                                    	
+#
+#Condition if block is custom
+condition:
+	patterns:
+		(ia|itemadder) [custom]block %block% (1¦exist[s])
+		(ia|itemadder) [custom]block %block% (2¦(does not exist[s])
+	check:
+		if parse mark = 1:
+			set {_item} to expr-1
+			set {_isCustomItem} to ItemsAdder.isCustomBlock({_item})	
+			if {_isCustomItem} is true:
+				continue
+		else if parse mark = 2:
+			set {_item} to expr-1
+			set {_isCustomItem} to ItemsAdder.isCustomBlock({_item})	
+			if {_isCustomItem} is false:
+				continue					
+#
+#Condition if item is custom
+condition:
+	patterns:
+		(ia|itemadder) [custom]item %item% (1¦exist[s])
+		(ia|itemadder) [custom]item %item% (2¦(does not exist[s])
+	check:
+		if parse mark = 1:
+			set {_item} to expr-1
+			set {_isCustomItem} to ItemsAdder.isCustomItem({_item})	
+			if {_isCustomItem} is true:
+				continue
+		else if parse mark = 2:
+			set {_item} to expr-1
+			set {_isCustomItem} to ItemsAdder.isCustomItem({_item})	
+			if {_isCustomItem} is false:
+				continue	
+#
+#Condition if crop is custom
+condition:
+	patterns:
+		(ia|itemadder) [custom]crop %block% (1¦exist[s])
+		(ia|itemadder) [custom]crop %block% (2¦(does not exist[s])
+	check:
+		if parse mark = 1:
+			set {_item} to expr-1
+			set {_isCustomItem} to ItemsAdder.isCustomCrop({_item})	
+			if {_isCustomItem} is true:
+				continue
+		else if parse mark = 2:
+			set {_item} to expr-1
+			set {_isCustomItem} to ItemsAdder.isCustomCrop({_item})	
+			if {_isCustomItem} is false:
+				continue
+#
+#Condition if block is furniture
+condition:
+	patterns:
+		(ia|itemadder) [custom]furniture %entity% (1¦exist[s])
+		(ia|itemadder) [custom]furniture %entity% (2¦does not exist[s])
+	check:
+		if parse mark = 1:
+			set {_furniture} to expr-1
+			set {_isCustomFurniture} to ItemsAdder.isFurniture({_furniture})	
+			if {_isCustomFurniture} is true:
+				continue
+		else if parse mark = 2:
+			set {_item} to expr-1
+			set {_isCustomFurniture} to ItemsAdder.isFurniture({_furniture})	
+			if {_isCustomFurniture} is false:
+				continue	
+#
+#Condition if mob is custom
+condition:
+	patterns:
+		(ia|itemadder) [custom]entity %entity% (1¦exist[s])
+		(ia|itemadder) [custom]entity %entity% (2¦does not exist[s])
+	check:
+		if parse mark = 1:
+			set {_entity} to expr-1
+			set {_isCustomentity} to CustomMob.byAlreadySpawned({_entity})
+			if {_isCustomentity} is set:
+				continue
+		else if parse mark = 2:
+			set {_entity} to expr-1
+			set {_isCustomentity} to CustomMob.byAlreadySpawned({_entity})
+			if {_isCustomentity} is not set:
+				continue
+#
+#Condition if player has enough of items
+condition (ia|itemadder) %player% has %integer% of %text%:
+	check:
+		set {_i} to ItemsAdder.getCustomItem(expr-3)	
+		set {_inv} to expr-1.getInventory()
+		set {_hasitem} to {_inv}.containsAtLeast({_i}, expr-2)
+		if {_hasitem} is true:
+			continue
+#
+#Condition if crop is fully grown
+condition:
+	patterns:
+		(ia|itemadder) [custom]crop %block% (1¦isn't|not) fully grown
+		(ia|itemadder) [custom]crop %block% (2¦is) fully grown
+	check:
+		if parse mark = 1:
+			set {_cropid} to CustomCrop.byAlreadyPlaced(expr-1)
+			set {_isfullygrown} to {_cropid}.isFullyGrown()
+			if {_isfullygrown} is false:
+				continue
+		else if parse mark = 2:
+			set {_cropid} to CustomCrop.byAlreadyPlaced(expr-1)
+			set {_isfullygrown} to {_cropid}.isFullyGrown()
+			if {_isfullygrown} is true:
+				continue
+	
+#  ______  __  __          _       
+# |  ____|/ _|/ _|        | |      
+# | |__  | |_| |_ ___  ___| |_ ___ 
+# |  __| |  _|  _/ _ \/ __| __/ __|
+# | |____| | | ||  __/ (__| |_\__ \
+# |______|_| |_| \___|\___|\__|___/                                                                    			
+#
+#Effect place custom block
+effect (ia|itemadder) (set|place) [custom]block %text% at %location%:
+	trigger:
+		CustomBlock.place(expr-1, expr-2)
+#
+#Effect remove custom block
+effect (ia|itemadder) (delete|remove) [custom]block at %location%:
+	trigger:
+		ItemsAdder.removeCustomBlock(expr-1)
+		set block at expr-1 to air
+#
+#Effect give custom item
+effect (ia|itemadder) (get|give|add) %integer% of %text% to %player%:
+	trigger:
+		set {_i} to ItemsAdder.getCustomItem(expr-2)
+		loop expr-1 times:
+			expr-3.getInventory().addItem({_i})
+#
+#Effect remove custom item
+effect (ia|itemadder) (remove|delete) %integer% of %text% from %player%:
+	trigger:
+		set {_i} to ItemsAdder.getCustomItem(expr-2)
+		loop expr-1 times:
+			expr-3.getInventory().removeItem({_i})		
+#
+#Effect spawn entity at location (Require CreaturesPlus)
+effect (ia|itemadder) spawn %text% at %location%:
+	trigger:
+		CustomMob.spawn(expr-1, expr-2)
+#
+#Effect increment the age of a crop
+effect (ia|itemadder) increment [custom]crop age of %block% by %number%:
+	trigger:
+		set {_block} to expr-1
+		set {_blockid} to CustomCrop.byAlreadyPlaced({_block})
+		loop expr-2 times:
+			{_blockid}.incrementAge()
+#
+#Effect set crop to fully grown
+effect (ia|itemadder) set [custom]crop %block% fully grown:
+	trigger:
+		set {_block} to expr-1
+		set {_blockid} to CustomCrop.byAlreadyPlaced({_block})
+		{_blockid}.setFullyGrown()
+#
+#Effect place crop at location
+effect (ia|itemadder) (set|place) [custom]crop %text% at %location%:
+	trigger:
+		CustomCrop.place(expr-1, expr-2)
+		
