@@ -7,6 +7,9 @@ The Skript API for ItemAdder.
 2. Do the command /sk reload API
 3. Enjoy !
 
+WARNING ! You need to install the skript addon skript-reflect !
+Download it here: https://forums.skunity.com/resources/skript-reflect.1146/
+
 # How to use it ?
 Use Expressions, Effects, and Conditions provided by the API.
 Find all the informations here.
